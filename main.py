@@ -6,9 +6,9 @@ def main():
         sys.exit(0)
     print("Input file present")
     inputFile = sys.argv[1]
+    summary = {}
     with open(inputFile, newline='') as csvfile:
         reader = csv.DictReader(csvfile)
-        summary = {}
         for row in reader:
             date = row["Date"]
             if(not date in summary.values()):
@@ -33,6 +33,14 @@ def main():
         print("Calories:", averageCal)
         print("Carbs: ", averageCarb)
         print("Prot: ", averageProt)
+
+    with open('data/output.csv', mode='w') as csv_file:
+        fieldnames = ['date', 'cal', 'carb','prot']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+        writer.writeheader()
+        for day in summary:
+            writer.writerow({'date': day,'cal': summary[day]["cal"], 'carb':summary[day]["carb"], 'prot': summary[day]["prot"]})
 
 if __name__ == "__main__":
     main()
